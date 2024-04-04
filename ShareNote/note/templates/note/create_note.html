@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Note</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"],
+        input[type="file"],
+        select,
+        textarea,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 150px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        #image,
+        #pdf {
+            display: none;
+        }
+
+        @media screen and (max-width: 600px) {
+            form {
+                padding: 10px;
+            }
+
+            input[type="text"],
+            input[type="file"],
+            select,
+            textarea,
+            button {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'note:view_notes' %}" class="back-button">Back</a><br><br>
+    <h2>Create Note</h2>
+    <form action="{% url 'note:create_notes' %}" method="post" id="createNoteForm" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label for="title">Enter Title Name:</label>
+        <input type="text" placeholder="Title of your note" name="title" id="title" required>
+
+        <label for="data">Enter note's content:</label>
+        <textarea name="data" id="data" placeholder="Enter content" rows="6"></textarea>
+
+        <label>Bold:</label>
+        <input type="checkbox" name="IsBold">
+
+        <label>Italic:</label>
+        <input type="checkbox" name="IsItalic">
+
+        <label>Underline:</label>
+        <input type="checkbox" name="IsUnderline">
+        <br><br>
+        <label for="align">Select alignment for your note:</label>
+        <select name="align" id="align">
+            <option value="None">Select alignment type</option>
+            <option value="Left-align">Left-align</option>
+            <option value="Right-align">Right-align</option>
+            <option value="Center-align">Center-align</option>
+        </select>
+
+        <label for="label">Enter Label:</label>
+        <input type="text" id="label" name="label">
+
+        <label for="media_type">Media Type:</label>
+        <select name="media_type" id="media_type">
+            <option value="None">Select media type</option>
+            <option value="Image">Image</option>
+            <option value="PDF">PDF</option>
+        </select>
+
+        <p id="image">Upload Image</p>
+        <p id="pdf">Upload PDF file</p>
+        <input type="file" name="details" id="fileInput" style="display: none;">
+
+        
+        
+        <label for="templateUsed">Template Design:</label>
+        <select name="templateUsed" id="templateUsed">
+            <a><option value="None">Select template design</option>
+            <option value="Daily Schedule">Daily Schedule</option>
+            <option value="To Do">To Do</option>
+            <option value="Week Schedule">Week Schedule</option>
+        </select>
+        <button type="submit">Create</button>
+    </form>
+
+    <script>
+        document.getElementById('media_type').addEventListener('change', function() {
+            var fileType = this.value === 'Image' ? 'image/*' : (this.value === 'PDF' ? '.pdf' : '');
+            document.getElementById('fileInput').style.display = 'block';
+            if (this.value === 'Image') {
+                document.getElementById('image').style.display = 'block';
+                document.getElementById('pdf').style.display = 'none';
+            } else if (this.value === 'PDF') {
+                document.getElementById('pdf').style.display = 'block';
+                document.getElementById('image').style.display = 'none';
+            }
+            document.getElementById('fileInput').setAttribute('accept', fileType);
+        });
+    </script>
+</body>
+</html>

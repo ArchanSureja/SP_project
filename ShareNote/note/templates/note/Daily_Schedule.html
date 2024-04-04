@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Personal Schedule</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #343a40;
+        }
+
+        .highlight {
+            background-color: #f8f9fa;
+        }
+
+        .editable {
+            cursor: pointer;
+        }
+
+        .editable input {
+            width: 100%;
+            border: none;
+            text-align: center;
+        }
+
+        .add-row-button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Daily Personal Schedule</h1>
+        <form id="scheduleForm" method="POST">
+            {% csrf_token %}
+            <table id="scheduleTable">
+                <tr>
+                    <th>Time</th>
+                    <th>Activity</th>
+                </tr>
+                <!-- Rows will be dynamically added here -->
+            </table>
+            <button type="button" class="add-row-button" onclick="addRow()">Add Row</button>
+            <button type="button" class="add-row-button" onclick="saveSchedule()">Save</button>
+            <a href="#" onclick="goBack()" style="text-decoration: none;" class="add-row-button">Back</a>
+            <div id="saveMessage" style="display: none;">Data saved successfully!</div>
+        </form>
+    </div>
+
+    <script>
+        function addRow() {
+            var table = document.getElementById("scheduleTable");
+            var newRow = table.insertRow(table.rows.length);
+            newRow.innerHTML = `
+                <td class="highlight editable" onclick="editCell(this)"></td>
+                <td class="editable" onclick="editCell(this)"></td>
+            `;
+        }
+
+        function editCell(cell) {
+            var input = document.createElement("input");
+            input.type = "text";
+            input.value = cell.innerText.trim();
+            input.onblur = function() {
+                cell.innerText = this.value;
+            };
+            cell.innerHTML = "";
+            cell.appendChild(input);
+            input.focus();
+        }
+
+        function saveSchedule() {
+            var table = document.getElementById("scheduleTable");
+            var rows = table.rows;
+            var scheduleData = [];
+            for (var i = 1; i < rows.length; i++) {
+                var time = rows[i].cells[0].innerText.trim();
+                var activity = rows[i].cells[1].innerText.trim();
+                scheduleData.push({ time: time, activity: activity });
+            }
+            var jsonData = JSON.stringify(scheduleData);
+            var noteId = "{{ note.id }}";
+            var templateId = "{{ note.templateUsed.id }}";
+            fetch(`/notes/templatesave/${noteId}/${templateId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: jsonData
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById("saveMessage").style.display = "block";
+                    setTimeout(function() {
+                        document.getElementById("saveMessage").style.display = "none";
+                    }, 3000); // Hide message after 3 seconds
+                } else {
+                    console.error('Failed to save schedule:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Error saving schedule:', error);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchExistingData();
+        });
+
+        function fetchExistingData() {
+            var noteId = "{{ note.id }}";
+            var templateId = "{{ note.templateUsed.id }}";
+            fetch(`/notes/get_existing_rows/${noteId}/${templateId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Populate the table with existing rows
+                        const table = document.getElementById("scheduleTable");
+                        data.rows.forEach(row => {
+                            const newRow = table.insertRow(-1); // Append row to the end of the table
+                            const timeCell = newRow.insertCell(0);
+                            const activityCell = newRow.insertCell(1);
+                            timeCell.textContent = row.time;
+                            activityCell.textContent = row.activity;
+                            // Add onclick event to each cell for editing
+                            timeCell.classList.add('editable');
+                            activityCell.classList.add('editable');
+                            timeCell.onclick = function() { editCell(this); };
+                            activityCell.onclick = function() { editCell(this); };
+                        });
+                    } else {
+                        console.error('Failed to fetch existing rows:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching existing rows:', error);
+                });
+        }
+
+
+        function goBack() {
+            window.history.back();
+        }
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Templates</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Header Styles */
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        /* Introduction Styles */
+        .introduction {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .introduction h2 {
+            margin-bottom: 10px;
+        }
+
+        .introduction p {
+            margin-bottom: 20px;
+        }
+
+        /* List Styles */
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: left; /* Align list items to the left */
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        /* Button Styles */
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            color: #ffffff;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            background-color: #007bff;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #45a049;
+        }
+
+        a:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Templates</h1>
+    <div class="introduction">
+        <h2>Welcome to Template Viewer</h2>
+        <p>This page offers various templates to assist you in organizing your tasks and schedules efficiently. Choose a template below to get started:</p>
+    </div>
+    <ul>
+        <li><a href="{% url 'temps:daily_schedule' %}">Daily Schedule</a> - Plan your tasks and events for the day.</li>
+        <li><a href="{% url 'temps:week_schedule' %}">Weekly Schedule</a> - Organize your weekly activities and appointments.</li>
+        <li><a href="{% url 'temps:todo' %}">To-Do List</a> - Create a list of tasks to accomplish.</li>
+    </ul>
+    <a href="{% url 'authApp:home' %}">Home</a>
+</div>
+</body>
+</html>

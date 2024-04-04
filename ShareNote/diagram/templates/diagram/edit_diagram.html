@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>diagram maker</title>
+        <style>
+            div#container{
+                display: flex;
+                flex-direction: row;
+
+            }
+            div#diagram-canvas{
+                 width: 70%;
+                 height: 35rem;
+                 border: 2px solid black;
+            }
+            div#object-list{
+                width: 25%;
+                height: 35rem;
+                border: 2px solid black;
+                margin-left: 10px;
+                
+            }
+            div img
+            {
+                width: 130px;
+                height: 90px;
+            }
+            input#title{
+                height: 17px;
+                margin-top: 10px;
+                margin-bottom: 10px
+            }
+            label
+            {
+                color: black;
+                border-radius: 10px;
+                font-size: large;
+                padding: 5px;
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: bolder;
+            }
+            #option_container{
+               display: flex;
+               flex-direction: row;
+               justify-content: space-around;
+            }
+            .options
+            {
+                margin-top: 10px;
+                margin-bottom: 10px;
+                font-size: larger;
+                color: aliceblue;
+                background-color: blue;
+                border-radius: 10px;
+                padding: 5px;
+            }
+            .btn
+            {
+                 font-size: larger;
+                 font-weight: bolder;
+                 color: aliceblue;
+                 background-color: blue;
+                 border-radius: 10px;
+                 padding: 5px;
+                 margin-right: 10px;
+            }
+
+        </style>
+    </head>
+  
+<body>
+   
+    <!-- content -->
+    <form action="" method="post">
+    {% csrf_token %}
+    <center>
+        <button type="submit" class="btn">home</button>
+        <label for="title">title-name</label>
+        <input type="text" placeholder="title" name="title" id="title" value="{{diagram.title}}">
+   </center>
+    <input type="hidden" name="version" value="{{diagram.version}}">
+    <input type="hidden" name="content" value="{{diagram.content}}" id="content">
+<div id="container">
+    <div id="diagram-canvas">
+
+    </div>
+    <div id="object-list">
+      <div id="rectangle" onclick="addRectTOdiagram()"><img src="{% static 'diagram/imgs/rectangle.png' %}" alt="" srcset=""></div>
+      <div id="circle" onclick="addCircleTOdiagram()"><img src="{% static 'diagram/imgs/circle.png'%}" alt="" srcset=""></div>
+      <div id="diamond" onclick="addDiamondTOdiagram()"><img src="{% static 'diagram/imgs/polygon.png'%}" alt="" srcset=""></div>
+      <div id="ellipse" onclick="addEllipseTOdiagram()"><img src="{% static 'diagram/imgs/elipse.png'%}" alt="" srcset=""></div>
+      <div id="link" onclick="addLinkTOdiagram()"><img src="{% static 'diagram/imgs/link.png' %}" alt="" srcset=""></div>
+      <div id="doublelink" onclick="addDlinkTOdiagram()"><img src="{% static 'diagram/imgs/Dlink.png' %}" alt="" srcset=""> </div>
+    </div>
+</div>
+    <!-- dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@joint/core@4.0.1/dist/joint.js"></script>
+    <script src="{% static 'diagram/js/main.js' %}"></script>
+    <div id="option_container">
+        <div onclick="rotate()" class="options">rotate</div>
+        <div onclick="change_color()" class="options">change color</div>
+        <div onclick="change_text()" class="options">change text</div>
+        <div onclick="delete_element()" class="options">delete</div>
+        <div onclick="set_content()" class="options">save</div>
+    </div>
+</form>
+</body>
+</html>

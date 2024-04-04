@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>view diagram</title>
+ <style>
+      div.diagram-container{
+        border:2px solid black;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      div.outer-container{
+        border:2px solid black;
+        margin-bottom:10px;
+        margin-top:10px;
+      }
+      .title{
+        font-size: large;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .btns{
+        margin: 15px;
+        border: 2px solid white;
+        background-color: blue;
+        color: white;
+        text-decoration: none;
+        font-size: large;
+        padding: 5px;
+        border-radius: 10px;
+        
+      }
+ </style>
+<script> 
+// function to render the diagram // 
+var str;
+var graph;
+var paper;
+function render(str,graph)
+{
+     let JsonOfString = JSON.parse(str)
+     graph.fromJSON(JsonOfString);
+}
+ 
+</script> 
+<script src="https://cdn.jsdelivr.net/npm/@joint/core@4.0.1/dist/joint.js"></script>
+</head>
+<body>
+        <a href="{% url 'diagram:create_diagram' %}" class="btns">create new diagram</a>
+    <a href="{% url 'authApp:home' %}" class="btns">back to home</a>
+    {% for diagram in diagrams %}
+<center>
+<div class="outer-container">
+    <p class="title">Title : {{diagram.title}}</p>
+    <a href="{{diagram.id}}" class="btns">edit</a>
+    <a href="delete/{{diagram.id}}" class="btns">delete</a>
+    <a href="#" onclick="downloadDiagram({{diagram.id}})" class="btns">download as jpeg</a>
+    <div id="diagram-container-{{diagram.id}}" width="500" height="500" class="diagram-container">
+    <script>
+             str = "{{diagram.content}}";
+             str  = str.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+             graph = new joint.dia.Graph();
+             paper = new joint.dia.Paper({
+             el: document.getElementById('diagram-container-{{diagram.id}}'),
+             model: graph,
+             width: 800,
+             height: 600,
+             interactive : false,
+       });
+       render(str,graph);
+    </script>
+    </div>
+</div>
+</center>
+    {% endfor %}
+</body>
+<script src="../../static/diagram/js/main.js"></script>
+</html>

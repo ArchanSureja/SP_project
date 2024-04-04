@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Personal Schedule</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow-x: auto; /* Enable horizontal scrolling if needed */
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #343a40;
+        }
+
+        .time-slot {
+            font-weight: bold;
+        }
+
+        .highlight {
+            background-color: #f8f9fa;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #007bff;
+            cursor: pointer;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            background-color: transparent;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .back-button:hover {
+            text-decoration: underline;
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weekly Personal Schedule</h1>
+        <table>
+            <tr>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+            </tr>
+            <tr>
+                <td class="highlight">Work</td>
+                <td class="highlight">Meeting</td>
+                <td class="highlight">Exercise</td>
+                <td class="highlight">Lunch</td>
+                <td class="highlight">Work</td>
+                <td class="highlight">Shopping</td>
+                <td class="highlight">Relaxation</td>
+            </tr>
+            <tr>
+                <td class="highlight">Breakfast</td>
+                <td class="highlight">Work</td>
+                <td class="highlight">Lunch</td>
+                <td class="highlight">Meeting</td>
+                <td class="highlight">Exercise</td>
+                <td class="highlight">Dinner</td>
+                <td class="highlight">Relaxation</td>
+            </tr>
+            <tr>
+                <td class="highlight">Exercise</td>
+                <td class="highlight">Lunch</td>
+                <td class="highlight">Work</td>
+                <td class="highlight">Meeting</td>
+                <td class="highlight">Breakfast</td>
+                <td class="highlight">Work</td>
+                <td class="highlight">Relaxation</td>
+            </tr>
+            <tr>
+                <td class="highlight">Work</td>
+                <td class="highlight">Lunch</td>
+                <td class="highlight">Exercise</td>
+                <td class="highlight">Dinner</td>
+                <td class="highlight">Meeting</td>
+                <td class="highlight">Breakfast</td>
+                <td class="highlight">Relaxation</td>
+            </tr>
+            <tr>
+                <td class="highlight">Shopping</td>
+                <td class="highlight">Exercise</td>
+                <td class="highlight">Lunch</td>
+                <td class="highlight">Work</td>
+                <td class="highlight">Meeting</td>
+                <td class="highlight">Dinner</td>
+                <td class="highlight">Relaxation</td>
+            </tr>
+        </table>
+        <a onclick="goBack()" class="back-button">Back</a>
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

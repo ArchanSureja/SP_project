@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Time Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: #fff;
+            border: 2px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #343a40;
+        }
+
+        .highlight {
+            background-color: #f8f9fa;
+        }
+
+        .special {
+            background-color: #f0f0f0;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            margin-left: 80px;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #007bff;
+            cursor: pointer;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            background-color: transparent;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .back-button:hover {
+            text-decoration: underline;
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>TIME TABLE</h1>
+    <table>
+        <tr>
+            <th>12:00 AM - 3:00 AM</th>
+            <th>3:00 AM - 6:00 AM</th>
+            <th>6:00 AM - 9:00 AM</th>
+            <th>9:00 AM - 12:00 PM</th>
+            <th>12:00 PM - 3:00 PM</th>
+            <th>3:00 PM - 6:00 PM</th>
+            <th>6:00 PM - 9:00 PM</th>
+            <th>9:00 PM - 12:00 AM</th>
+        </tr>
+        <tr>
+            <td class="highlight">Sleep</td>
+            <td class="highlight">Sleep</td>
+            <td class="highlight">Morning Jog</td>
+            <td class="highlight">Breakfast</td>
+            <td class="highlight">Work</td>
+            <td class="highlight">Lunch</td>
+            <td class="highlight">Exercise</td>
+            <td class="highlight">Dinner</td>
+        </tr>
+        <tr>
+            <td class="highlight">Rest</td>
+            <td class="highlight">Rest</td>
+            <td class="highlight">Shower</td>
+            <td class="highlight">Work</td>
+            <td class="highlight">Lunch</td>
+            <td class="highlight">Meeting</td>
+            <td class="highlight">Dinner</td>
+            <td class="highlight">Relaxation</td>
+        </tr>
+        <tr>
+            <td class="highlight">Sleep</td>
+            <td class="highlight">Sleep</td>
+            <td class="highlight">Morning Routine</td>
+            <td class="highlight">Work</td>
+            <td class="highlight">Lunch</td>
+            <td class="highlight">Exercise</td>
+            <td class="highlight">Dinner</td>
+            <td class="highlight">Relaxation</td>
+        </tr>
+        <tr>
+            <td class="highlight">Sleep</td>
+            <td class="highlight">Sleep</td>
+            <td class="highlight">Breakfast</td>
+            <td class="highlight">Work</td>
+            <td class="highlight">Lunch</td>
+            <td class="highlight">Meeting</td>
+            <td class="highlight">Dinner</td>
+            <td class="highlight">Relaxation</td>
+        </tr>
+        <tr>
+            <td class="highlight">Rest</td>
+            <td class="highlight">Rest</td>
+            <td class="highlight">Morning Jog</td>
+            <td class="highlight">Work</td>
+            <td class="highlight">Lunch</td>
+            <td class="highlight">Exercise</td>
+            <td class="highlight">Dinner</td>
+            <td class="highlight">Relaxation</td>
+        </tr>
+        <tr>
+            <td class="highlight">Sleep</td>
+            <td class="highlight">Sleep</td>
+            <td class="highlight">Morning Routine</td>
+            <td class="highlight">Work</td>
+            <td class="highlight">Lunch</td>
+            <td class="highlight">Meeting</td>
+            <td class="highlight">Dinner</td>
+            <td class="highlight">Relaxation</td>
+        </tr>
+    </table>
+    <a onclick="goBack()" class="back-button">Back</a>
+</body>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+</html>

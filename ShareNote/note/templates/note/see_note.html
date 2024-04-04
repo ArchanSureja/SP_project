@@ -1,0 +1,151 @@
+{% load custom_filters %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .note-details {
+            margin-bottom: 20px;
+        }
+
+        .note-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .note-label, .note-created-by, .media-heading, .content-heading, .collaborators-heading {
+            margin-bottom: 10px;
+        }
+
+        .media-items, .note-content, .collaborators-list {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .media-items img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .media-pdf-link {
+            display: block;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .content-item {
+            margin-bottom: 10px;
+        }
+
+        .collaborator-item {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="#" onclick="goBack()" style="text-decoration: none;" class="add-row-button">Back</a>
+        <br><br>
+
+        <div class="note-details">
+            <h2 class="note-title">Title: {{ note.title }}</h2>
+            <h3 class="note-label">Label: {{ note.label }}</h3>
+            <h3 class="note-created-by">Created By: {{ note.createdBy }}</h3>
+            <h3 class="note-created-by">Version: {{ note.version }}</h3>
+        </div>
+
+        <div class="note-content">
+            <h3 class="content-heading">Content:</h3>
+            {% for t in text %}
+            <div style="{% if t.IsBold %} font-weight: bold; {% endif %}
+                        {% if t.IsItalic %} font-style: italic; {% endif %}
+                        {% if t.IsUnderline %} text-decoration: underline; {% endif %}
+                        {% if t.align == 'Left-align' %} text-align: left; {% endif %}
+                        {% if t.align == 'Right-align' %} text-align: right; {% endif %}
+                        {% if t.align == 'Center-align' %} text-align: center; {% endif %}">
+                        {{ t.data }} 
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="media-section">
+            <h3 class="media-heading">Media:</h3>
+            <div class="media-items"> 
+                {% for m in media %}
+                    {% if m.media_type == 'Image' %}
+                        <img src="/notes/medias/{{ m.details|filename }}" alt="Image" style="height: 250px;">
+                    {% elif m.media_type == 'PDF' %}
+                        <a href="/notes/medias/{{ m.details|filename }}" target="_blank" class="media-pdf-link">{{ m.details|filename }}</a>
+                    {% endif %}
+                    <br><br>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="template-section">
+            <h3 class="template">Template:</h3>
+            {% if note.templateUsed.title == 'Daily Schedule' %}
+                <a href="{% url 'note:daily_schedule' note.id %}"><p>Template: {{ note.templateUsed.title }}</p></a>    
+                <!-- <p>{{ note.templateUsed.content }}</p> -->
+            {% elif note.templateUsed.title == 'To Do' %}
+                <a href="{% url 'note:todo' note.id %}"><p>Template: {{ note.templateUsed.title }}</p></a>
+            {% elif note.templateUsed.title == 'Week Schedule' %}
+                <a href="{% url 'note:week_schedule' note.id %}"><p>Template: {{ note.templateUsed.title }}</p></a>
+            {% endif %}
+        </div>
+
+        <div class="collaborators-section">
+            <h3 class="collaborators-heading">Collaborators:</h3>
+            <ul class="collaborators-list">
+                {% for c in collab %}
+                    <li class="collaborator-item">{{ c.user_id.username }} - {{ c.permission }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

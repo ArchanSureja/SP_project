@@ -1,0 +1,130 @@
+/* Global Styles */
+body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header Styles */
+.header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header .username {
+    font-weight: bold;
+}
+
+/* Introduction Styles */
+.introduction {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.introduction h2 {
+    margin-top: 0;
+    font-size: 22px;
+    color: #333;
+}
+
+.introduction p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* Button Styles */
+.create-note-btn,
+.label-button,
+.addCollabs,
+.media,
+.collab {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: #007bff;
+}
+
+.create-note-btn:hover,
+.label-button:hover,
+.addCollabs:hover,
+.media:hover,
+.collab:hover {
+    background-color: #45a049; /* Change background color on hover */
+}
+
+.create-note-btn:focus,
+.label-button:focus,
+.addCollabs:focus,
+.media:focus,
+.collab:focus {
+    outline: none;
+}
+
+/* Note Styles */
+.note {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.note-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.note-content {
+    margin-top: 5px;
+}
+
+/* Form Styles */
+.collabForm {
+    display: none;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.collabForm input[type="text"],
+.collabForm button[type="submit"] {
+    margin-right: 10px;
+    margin-bottom: 5px;
+}

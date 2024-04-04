@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .search-bar {
+            flex: 1; /* Take remaining space */
+            margin: 0px 20px 0px 380px;
+        }
+
+        .search-bar input[type="text"] {
+            width: 45%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .search-bar button {
+            padding: 8px 12px;
+            background-color: #fff;
+            border: 1px solid #007bff;
+            color: #007bff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info span {
+            margin-right: 10px;
+        }
+
+        .user-info a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 10px;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .user-info a:hover {
+            color: #f0f0f0;
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .message {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .message p {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .info-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .info-buttons a {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .info-buttons a:hover {
+            background-color: #0056b3;
+        }
+       
+    
+    .suggestion-item {
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .suggestion-item:hover {
+        background-color: #f0f0f0;
+    }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Home Page</h1>
+        <div class="search-bar">
+            <form>
+                <input type="text" placeholder="Search..." id="search-input">
+                <div id="suggestions"></div>
+            </form>
+        </div>
+        <div class="user-info">
+            <span>{{ request.user.username }}</span>
+            <!-- <a href="#"><i class="fas fa-cog"></i></a> -->
+            <a href="{% url 'authApp:logout' %}"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="message">
+            <p>Welcome to your dashboard. Here you can access all the features and functionalities of our application.</p>
+        </div>
+        <div class="info-buttons">
+            {% if not request.user.is_authenticated %}
+                <a href="{% url 'authApp:register' %}">Signup</a>
+                <a href="{% url 'authApp:login' %}">Login</a>
+            {% else %}
+                <a href="{% url 'diagram:view_diagram' %}">View Diagrams</a>
+                <a href="{% url 'note:view_notes' %}">View Notes</a>
+                <a href="{% url 'temps:view_temps' %}">View Template Designs</a>
+                <a href="{% url 'authApp:resetPasswordPage'%}">Reset Password</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+<script>
+    const searchInput = document.getElementById('search-input');
+    const suggestionsDiv = document.getElementById('suggestions');
+   
+
+    function showSuggestions() {
+        suggestionsDiv.style.display = 'block';
+    }
+    function hideSuggestions() {
+        suggestionsDiv.style.display = 'none';
+    }
+
+    searchInput.addEventListener('input', function() {
+        const searchTerm = searchInput.value;
+        fetch("{% url 'authApp:note_suggestions' %}?search=" + encodeURIComponent(searchTerm))
+            .then(response => response.json())
+            .then(data => {
+                suggestionsDiv.innerHTML = '';
+                data.suggestions.forEach(suggestion => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.textContent = suggestion.name;
+                    suggestionItem.classList.add('suggestion-item');  
+                    suggestionsDiv.appendChild(suggestionItem);
+                    suggestionItem.addEventListener('click', function() {
+                        const note_id = suggestion.id;
+                        window.location.href =`/notes/note/${note_id}`;
+                    });
+                });
+            });
+            showSuggestions();
+    });
+    document.body.addEventListener('click', function(event) {
+        const isClickInsideSearch = searchInput.contains(event.target);
+        const isClickInsideSuggestions = suggestionsDiv.contains(event.target);
+
+        if (!isClickInsideSearch && !isClickInsideSuggestions) {
+            hideSuggestions();
+        }
+    });
+</script>
+</html>

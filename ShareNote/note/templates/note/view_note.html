@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Notes</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <a href="{% url 'authApp:home' %}" class="create-note-btn">Home</a>
+        <a href="{% url 'note:create_note_form' %}" class="create-note-btn">Create Note</a>
+    </div>
+    <hr>
+    <div class="introduction">
+        <h2>Welcome {{ request.user.username }}</h2>
+        <p>This page allows you to view and manage your notes. You can navigate using the buttons below.</p>
+    </div>
+    {% if user_notes %}
+        {% load custom_filters %}
+        {% with labels=user_notes|extract_labels %}
+            <div class="label-buttons">
+                <h3>Labels:</h3>
+                <button class="label-button" onclick="filterNotes('all')">All Notes</button>
+                {% for label in labels %}
+                    <!-- Generate a button for each label -->
+                    <button class="label-button" onclick="filterNotes('{{ label }}')">{{ label }}</button>
+                {% endfor %}
+            </div>
+            <ul>
+                {% for note in user_notes %}
+                    <div class="note" data-label="{{ note.label }}" style="display: none;">
+                        <li style="list-style: none;">
+                            <p class="note-title">Title: {{ note.title }}</p>
+                            <!-- Template-specific content -->
+                            {% if note.templateUsed.title == 'Daily Schedule' %}
+                                <a href="{% url 'note:daily_schedule' note.id %}"><p>Template: {{ note.templateUsed.title }}</p></a>
+                                <p>{{ note.templateUsed.content }}</p>
+                            {% elif note.templateUsed.title == 'To Do' %}
+                                <a href="{% url 'note:todo' note.id %}"><p>Template: {{ note.templateUsed.title }}</p></a>
+                            {% elif note.templateUsed.title == 'Week Schedule' %}
+                                <a href="{% url 'note:week_schedule' note.id %}"><p>Template: {{ note.templateUsed.title }}</p></a>
+                            {% endif %}
+                            <!-- Note content -->
+                            <div class="note-content">
+                                <h3>Content: </h3>
+                                {% for text in note.text_set.all %}
+                                    <div style="{% if text.IsBold %} font-weight: bold; {% endif %}
+                                            {% if text.IsItalic %} font-style: italic; {% endif %}
+                                            {% if text.IsUnderline %} text-decoration: underline; {% endif %}
+                                            {% if text.align == 'Left-align' %} text-align: left; {% endif %}
+                                            {% if text.align == 'Right-align' %} text-align: right; {% endif %}
+                                            {% if text.align == 'Center-align' %} text-align: center; {% endif %}
+                                            font-family : {{ text.style }}">
+                                        {{ text.data }} 
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <!-- Media -->
+                            <button class="media" onclick="mediaShow('{{ note.id }}')">Media</button>
+                            <div class="mediaAll" style="display: none;" id="{{ note.id }}"> 
+                                {% for media in note.media_set.all %}
+                                    {% if media.media_type == 'Image' %}
+                                        <img src="{{ media.details }}" alt="Image" style="height: 200px; margin-top: 20px;">
+                                    {% elif media.media_type == 'PDF' %}
+                                        <a href="{{ media.details }}" target="_blank">{{ media.details|filename }}</a>
+                                    {% endif %}
+                                    <form method="post" action="{% url 'note:delete_media' media.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="delete-media-btn" data-media-id="{{ media.id }}">Delete</button>
+                                    </form>
+                                    <br>
+                                {% endfor %}
+                            </div>
+                            <!-- Collaborators -->
+                            <button class="collab" onclick="collabShow('{{ note.id }}')">Show Collaborators</button>
+                            <div class="collabsName" style="display: none;" id="{{ note.id }}">
+                                <h3>Collaborators:</h3>
+                                <ul>
+                                    {% for collab in note.collabs_set.all %}
+                                        <li>
+                                            <strong>{{ collab.user_id.username }}</strong> - 
+                                            {% if collab.permission == 'R' %}
+                                                Read-only
+                                            {% elif collab.permission == 'RW' %}
+                                                Read and Write
+                                            {% else %}
+                                                {{ collab.permission }} Display permission value if neither R nor RW 
+                                            {% endif %}
+                                            <a href="{% url 'note:delete_collab' collab.id %}">delete</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <!-- Add Collaborators -->
+                            <div>
+                                <button class="addCollabs" onclick="collabForm('{{ note.id }}')">Add Collaborators</button>
+                                <form method="post" action="{% url 'note:add_collabs' %}" class="collabForm" style="display: none;" onsubmit="return validateCollabs('{{ note.id }}')" id="{{note.id}}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="note_id" value="{{ note.id }}" />
+                                    Enter collaborator name: <input type="text" class="collaboratorName" name="user_id" value="">
+                                    <label for="permission">Permission:</label>
+                                    <select name="permission" id="permission">
+                                        <option value="None">Select permission</option>
+                                        <option value="RW">Read and Write</option>
+                                        <option value="R">Read-only</option>
+                                    </select>
+                                    <button type="submit">Add</button>
+                                </form>
+                            </div>
+                            <!-- Edit/Delete Note -->
+                            <div>
+                                <br>
+                                {% with error_message=" " %}
+                                    <a href="{% url 'note:edit_note_form_m' note_id=note.id error=error_message %}">edit note</a> |
+                                {% endwith %}
+                                <a href="{% url 'note:delete_note' note.id %}">delete note</a>
+                            </div>
+                        </li>
+                    </div>
+                {% endfor %}
+            </ul>
+        {% endwith %}
+    {% else %}
+        <p>No notes available.</p>
+        <p>Create your own notes with templates and customization...</p>
+    {% endif %}
+</div>
+
+<div class="cn" style="display: none;">
+    <h2>Your collab notes</h2>
+    {% for note in collabs_notes %}
+        {% for user in note.collabs_set.all %}
+            <div class="note">
+                <span style="font-weight: 900;">Title:</span> {{ note.title }}<br>
+                <span style="font-weight: 900;">Created By:</span> {{ note.createdBy }}<br>
+                <span style="font-weight: 900;">Permission:</span> {{ user.permission }}<br>
+                {% if user.permission == 'RW' %}
+                    <a href="{% url 'note:edit_note_form_c' note.id %}" >edit note</a> |
+                    <a href="{% url 'note:see_perticular_note' note.id %}" >view note</a>
+                {% elif user.permission == 'R' %}
+                    <a href="{% url 'note:see_perticular_note' note.id %}" >view note</a> 
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+<script>
+    function collabShow(noteId) {
+        var collab = document.querySelector('.collabsName[id="' + noteId + '"]');
+        if (collab) {
+            if (collab.style.display === "block") {
+                collab.style.display = "none";
+            } else {
+                var collabs = document.querySelectorAll('.collabsName');
+                collabs.forEach(function(collab) {
+                    collab.style.display = "none";
+                });
+                collab.style.display = "block";
+            }
+        } else {
+            console.error('Collab not found');
+        }
+    }
+
+    function mediaShow(noteId) {
+        var media = document.querySelector('.mediaAll[id="' + noteId + '"]');
+        if (media) {
+            if (media.style.display === "block") {
+                media.style.display = "none";
+            } else {
+                var medias = document.querySelectorAll('.mediaAll');
+                medias.forEach(function(media) {
+                    media.style.display = "none";
+                });
+                media.style.display = "block";
+            }
+        } else {
+            console.error('Media not found');
+        }
+    }
+
+    function collabForm(noteId) {
+        var form = document.querySelector('.collabForm[id="' + noteId + '"]');
+        if (form) {
+            if (form.style.display === "block") {
+                form.style.display = "none";
+            } else {
+                var allForms = document.querySelectorAll('.collabForm');
+                allForms.forEach(function(form) {
+                    form.style.display = "none";
+                });
+                form.style.display = "block";
+            }
+        } else {
+            console.error('Form not found');
+        }
+    }
+
+    function validateCollabs(noteId) {
+        var collaboratorName = document.querySelector('.collaboratorName[data-note-id="' + noteId + '"]').value;
+        var users = [
+            {% for user in users %}
+                "{{ user.username }}",
+            {% endfor %}
+        ];
+        var found = false;
+        for (var i = 0; i < users.length; i++) {
+            if (users[i] === collaboratorName) {
+                found = true;
+                document.querySelector('.collaboratorName[data-note-id="' + noteId + '"]').setAttribute("user_id", users[i]);
+                break;
+            }
+        }
+        if (!found) {
+            alert("User " + collaboratorName + " is not present.");
+            return false;
+        }
+        return true;
+    }
+
+    function filterNotes(label) {
+        var notes = document.querySelectorAll('.note');
+        var cn = document.querySelector('.cn');
+        if (label === 'all') {
+            notes.forEach(function(note) {
+                note.style.display = 'block';
+            });
+            cn.style.display = 'block';
+        } else {
+            notes.forEach(function(note) {
+                if (note.dataset.label === label) {
+                    note.style.display = 'block';
+                    cn.style.display = 'none';
+                } else {
+                    note.style.display = 'none';
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

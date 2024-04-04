@@ -1,0 +1,160 @@
+/* edit.css */
+
+/* Resetting default margin and padding */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Body */
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+}
+
+.head .img {
+  display: flex;
+  align-items: center;
+}
+
+.head .img a {
+  text-decoration: none;
+  margin-right: 20px;
+}
+
+.head .img a img {
+  width: 30px;
+  height: 30px;
+}
+
+.head .text {
+  font-size: 25px;
+  font-weight: 700;
+}
+
+/* Form Panel */
+.panel {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.panel label {
+  font-weight: bold;
+}
+
+.panel input[type="text"],
+.panel textarea {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  display: flex;
+}
+
+/* Font Styles */
+.font-style {
+  display: flex;
+  margin-top: 10px;
+  border: 1px solid black;
+  border-radius: 3px;
+  height: 25px;
+  width: 160px;
+}
+
+.font-style p {
+  margin: 0;
+  margin-right: 20px;
+}
+
+.font-style img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* Note Content Area */
+.area {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  min-height: 300px; /* Set a minimum height to prevent content jumping */
+  line-height: 1.6; /* Adjust line height for better readability */
+}
+
+.area label {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.area textarea {
+  width: 100%;
+  height: calc(100% - 35px);
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical; /* Allow vertical resizing */
+  font-size: 16px; /* Set a comfortable font size */
+  line-height: 1.6; /* Adjust line height for better readability */
+}
+
+/* Additional Styles for Formatting Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.toolbar button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.toolbar button img {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+/* Your existing styles */
+.back-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+}
+
+
+.highlight {
+  background-color: rgba(200, 200, 200, 0.5); /* Light grayish background color with transparency */
+  border-radius: 3px; /* Rounded corners */
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5); /* Box shadow for blur effect */
+  border: 1px solid gray;
+  padding: 2px;
+}

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'edit.css' %}">
+    
+</head>
+<body>
+    
+    <a href="{% url 'note:view_notes' %}" class="back-button">Back</a><br><br>
+    <div class="area">
+        
+        {% for text_item in text %}
+            {% load custom_filters %}
+            <form action="{% url 'note:edit_notes_c' note.id %}" method="post" id="editNoteForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="panel" style="display: flex;">
+                    <div style="display: flex;">
+                        <label for="title">Created by:</label>
+                        <span id="createdBy" name="createdBy" style="width: 150px; margin-left: 10px; ">{{ note.createdBy }}</span>
+                    </div>
+                    <div style="display: flex;">
+                        <label for="title">Label Name:</label>
+                        <span id="label" name="label" style="width: 150px; margin-left: 10px; ">{{ note.label }}</span>
+                    </div>
+                    
+                
+                    <div class="font-style" style="display: flex;">
+                        <select id="fontSelect" onchange="selectFontStyle()" name="style" style="margin-left: 10px; border: none;">
+                            <option value="Arial" {% if text_item.style == 'Arial' %} selected {% endif %}>Arial</option>
+                            <option value="Times New Roman" {% if text_item.style == 'Times New Roman' %} selected {% endif %}>Times New Roman</option>
+                            <option value="Verdana" {% if text_item.style == 'Verdana' %} selected {% endif %}>Verdana</option>
+                            <option value="Helvetica" {% if text_item.style == 'Helvetica' %} selected {% endif %}>Helvetica</option>
+                            <option value="Georgia" {% if text_item.style == 'Georgia' %} selected {% endif %}>Georgia</option>
+                            <option value="Courier New" {% if text_item.style == 'Courier New' %} selected {% endif %}>Courier New</option>
+                            <option value="Palatino" {% if text_item.style == 'Palatino' %} selected {% endif %}>Palatino</option>
+                            <option value="Garamond" {% if text_item.style == 'Garamond' %} selected {% endif %}>Garamond</option>
+                            <option value="Bookman" {% if text_item.style == 'Bookman' %} selected {% endif %}>Bookman</option>
+                            <option value="Trebuchet MS" {% if text_item.style == 'Trebuchet MS' %} selected {% endif %}>Trebuchet MS</option>
+                            <option value="Arial Black" {% if text_item.style == 'Arial Black' %} selected {% endif %}>Arial Black</option>
+                            <option value="Comic Sans MS" {% if text_item.style == 'Comic Sans MS' %} selected {% endif %}>Comic Sans MS</option>
+                            <option value="Impact" {% if text_item.style == 'Impact' %} selected {% endif %}>Impact</option>
+                            <option value="Lucida Sans Unicode" {% if text_item.style == 'Lucida Sans Unicode' %} selected {% endif %}>Lucida Sans Unicode</option>
+                            <option value="Century Gothic" {% if text_item.style == 'Century Gothic' %} selected {% endif %}>Century Gothic</option>
+                            <option value="Arial Narrow" {% if text_item.style == 'Arial Narrow' %} selected {% endif %}>Arial Narrow</option>
+                            <option value="Calibri" {% if text_item.style == 'Calibri' %} selected {% endif %}>Calibri</option>
+                            <option value="Cambria" {% if text_item.style == 'Cambria' %} selected {% endif %}>Cambria</option>
+                            <option value="Rockwell" {% if text_item.style == 'Rockwell' %} selected {% endif %}>Rockwell</option>
+                            <option value="Tahoma" {% if text_item.style == 'Tahoma' %} selected {% endif %}>Tahoma</option>
+                            <!-- Add more font styles as needed -->
+                        </select>
+                        
+                       
+                       <div class="imgs" style="margin-top: 0px;display: flex;margin-left: 10px;">
+                           <!-- <img src="{% static 'images/font.png' %}" alt="font" height="35px"> -->
+
+
+                           <img src="{% static 'images/bold.png' %}" alt="" style="margin-left: 15px; height: 20px;" onclick="setBold(this)" onload="{% if text_item.IsBold %} toggleHighlight(this); {% endif %}">
+                           <img src="{% static 'images/italic.png' %}" alt="" style="margin-left: 15px; height: 20px;" onclick="setItalic(this)" onload="{% if text_item.IsItalic %} toggleHighlight(this); {% endif %}">
+                           <img src="{% static 'images/underline-text-option.png' %}" alt="" style="margin-left: 15px; height: 20px;" onclick="setUnderline(this)" onload="{% if text_item.IsUnderline %} toggleHighlight(this); {% endif %}">
+                           <img src="{% static 'images/align-left.png' %}" alt="" class="alignment-button" style="margin-left: 15px; height: 20px;" onclick="setAlignment(this, 'left')" onload="{% if text_item.align == 'Left-align' %} toggleHighlight(this); {% endif %}">
+                           <img src="{% static 'images/center-align.png' %}" alt="" class="alignment-button" style="margin-left: 15px; height: 20px;" onclick="setAlignment(this, 'center')" onload="{% if text_item.align == 'Center-align' %} toggleHighlight(this); {% endif %}">
+                           <img src="{% static 'images/align-right.png' %}" alt="" class="alignment-button" style="margin-left: 15px; height: 20px;" onclick="setAlignment(this, 'right')" onload="{% if text_item.align == 'Right-align' %} toggleHighlight(this); {% endif %}">
+                       </div>
+                       
+                   </div>
+                </div>
+
+                
+
+                <label for="data">Enter note's content:</label>
+                
+                    <div>
+                        {% if text_item.IsBold %}
+                            <input type="hidden" name="IsBold" id="isBoldInput" value="1">
+                        {% else %}
+                            <input type="hidden" name="IsBold" id="isBoldInput" value="0">
+                        {% endif %}
+
+                        {% if text_item.IsItalic %}
+                            <input type="hidden" name="IsItalic" id="isItalicInput" value="1">
+                        {% else %}
+                            <input type="hidden" name="IsItalic" id="isItalicInput" value="0">
+                        {% endif %}
+
+                        {% if text_item.IsUnderline %}
+                            <input type="hidden" name="IsUnderline" id="isUnderlineInput" value="1">
+                        {% else %}
+                            <input type="hidden" name="IsUnderline" id="isUnderlineInput" value="0">
+                        {% endif %}
+
+                        <input type="hidden" name="align" id="align" value="{% if text_item.align == 'Left-align' %}Left-align
+                                                                            {% elif text_item.align == 'Right-align' %}Right-align
+                                                                            {% elif text_item.align == 'Center-align' %}Center-align
+                                                                            {% endif %}" onload="setAlignment(this)">
+
+
+                        <textarea name="data" id="data" rows="6" style="{% if text_item.IsBold %} font-weight: bold; {% endif %}
+                                {% if text_item.IsItalic %} font-style: italic; {% endif %}
+                                {% if text_item.IsUnderline %} text-decoration: underline; {% endif %}
+                                {% if text_item.align == 'Left-align' %} text-align: left; {% endif %}
+                                {% if text_item.align == 'Right-align' %} text-align: right; {% endif %}    
+                                {% if text_item.align == 'Center-align' %} text-align: center; {% endif %}
+                                font-family : {{ text_item.style }}" required>{{ text_item.data }}</textarea>
+                    </div>
+                {% endfor %}
+
+                <br>
+                <label for="media_type">Media Type:</label>
+                <select name="media_type" id="media_type">
+                    <option value="None">Select media type</option>
+                    <option value="Image">Image</option>
+                    <option value="PDF">PDF</option>
+                </select>
+                
+                <p id="image" style="display: none;">Upload Image</p>
+                <p id="pdf" style="display: none;">Upload PDF file</p>
+                <input type="file" name="details" id="fileInput" style="display: none;">
+                <br><br>
+
+                
+                <button type="submit">Create</button>
+            </form>
+        </div>
+       
+      
+        <script>
+            
+            function setAlignment(button, alignment) {
+                var textarea = document.getElementById('data');
+                var align;
+    
+                // Deactivate all alignment buttons
+                var alignmentButtons = document.querySelectorAll('.alignment-button');
+                alignmentButtons.forEach(function(btn) {
+                    btn.classList.remove('highlight');
+                });
+
+                // Set the alignment for the textarea
+                textarea.style.textAlign = alignment;
+
+                // Highlight the selected button
+                toggleHighlight(button);
+
+                // Update the hidden input value
+                if (alignment == 'left') {
+                    document.getElementById('align').value = "Left-align";
+                    align = 'Left-align';
+                } else if (alignment == 'right') {
+                    document.getElementById('align').value = "Right-align";
+                    align = 'Right-align';
+                } else if (alignment == 'center') {
+                    document.getElementById('align').value = "Center-align";
+                    align = 'Center-align';
+                }
+            }
+
+
+
+            function setBold(button) {
+                var textarea = document.getElementById('data');
+                textarea.style.fontWeight = textarea.style.fontWeight === 'bold' ? 'normal' : 'bold';
+                document.getElementById('isBoldInput').value = textarea.style.fontWeight === 'bold' ? '1' : '0';
+                toggleHighlight(button);
+            }
+
+            function setItalic(button) {
+                var textarea = document.getElementById('data');
+                textarea.style.fontStyle = textarea.style.fontStyle === 'italic' ? 'normal' : 'italic';
+                document.getElementById('isItalicInput').value = textarea.style.fontStyle === 'italic' ? '1' : '0';
+                toggleHighlight(button);
+            }
+
+            function setUnderline(button) {
+                var textarea = document.getElementById('data');
+                textarea.style.textDecoration = textarea.style.textDecoration === 'underline' ? 'none' : 'underline';
+                document.getElementById('isUnderlineInput').value = textarea.style.textDecoration === 'underline' ? '1' : '0';
+                toggleHighlight(button);
+            }
+
+            function toggleHighlight(button) {
+                button.classList.toggle('highlight');
+            }
+
+            // Set initial state onload
+            window.onloadstart = function() {
+                var boldButton = document.querySelector("img[src$='bold.png']");
+                var italicButton = document.querySelector("img[src$='italic.png']");
+                var underlineButton = document.querySelector("img[src$='underline-text-option.png']");
+                var leftAlignButton = document.querySelector("img[src$='align-left.png']");
+                var centerAlignButton = document.querySelector("img[src$='center-align.png']");
+                var rightAlignButton = document.querySelector("img[src$='align-right.png']");
+                if (boldButton && boldButton.parentElement.style.fontWeight === 'bold') {
+                    toggleHighlight(boldButton);
+                }
+                if (italicButton && italicButton.parentElement.style.fontStyle === 'italic') {
+                    toggleHighlight(italicButton);
+                }
+                if (underlineButton && underlineButton.parentElement.style.textDecoration === 'underline') {
+                    toggleHighlight(underlineButton);
+                }
+                if (leftAlignButton && textarea.style.textAlign === 'left') {
+                    toggleHighlight(leftAlignButton);
+                }
+                if (centerAlignButton && textarea.style.textAlign === 'center') {
+                    toggleHighlight(centerAlignButton);
+                }
+                if (rightAlignButton && textarea.style.textAlign === 'right') {
+                    toggleHighlight(rightAlignButton);
+                }
+            };
+            
+            document.getElementById('media_type').addEventListener('change', function() {
+                var fileType = this.value === 'Image' ? 'image/*' : (this.value === 'PDF' ? '.pdf' : '');
+                document.getElementById('fileInput').style.display = 'block';
+                if (this.value === 'Image') {
+                    document.getElementById('image').style.display = 'block';
+                    document.getElementById('pdf').style.display = 'none';
+                } else if (this.value === 'PDF') {
+                    document.getElementById('pdf').style.display = 'block';
+                    document.getElementById('image').style.display = 'none';
+                }
+                document.getElementById('fileInput').setAttribute('accept', fileType);
+            });
+        
+            function selectFontStyle() {
+                var select = document.getElementById("fontSelect");
+                var selectedFont = select.options[select.selectedIndex].value;
+                var textarea = document.getElementById('data'); 
+                textarea.style.fontFamily = selectedFont;
+            }
+        </script> 
+          
+</body>
+</html> 

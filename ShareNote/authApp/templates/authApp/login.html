@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .login-section {
+            flex: 1;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-section h1 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .login-section hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+
+        .login-section p {
+            color: #777;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"],
+        .login-form input[type="email"] {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .login-form button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .register-link {
+            text-align: center;
+        }
+
+        .register-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .intro-section {
+            flex: 1;
+            padding: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: fadeInLeft 1s;
+        }
+
+        .intro-section h2 {
+            margin-top: 0;
+            font-size: 28px;
+            color: #fff;
+        }
+
+        .intro-section p {
+            color: #fff;
+            line-height: 1.5;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="intro-section">
+            <h2>Welcome to Note Share Application</h2>
+            <p>
+                Note Share is a platform that allows you to create, manage, and share your notes with others effortlessly. 
+                With our user-friendly interface and powerful features, you can organize your thoughts, collaborate with 
+                others, and access your notes from anywhere.
+            </p>
+            <h3>Advantages of Note Share:</h3>
+            <ul>
+                <li>Effortlessly create and organize notes</li>
+                <li>Collaborate with others in real-time</li>
+                <li>Access your notes from any device</li>
+                <li>Secure and private</li>
+            </ul>
+            <h3>Our Functionalities:</h3>
+            <ul>
+                <li>Create and edit notes</li>
+                <li>Share notes with others</li>
+                <li>Collaborate on notes with team members</li>
+                <li>Organize notes using tags and categories</li>
+                <li>Customize note formatting</li>
+            </ul>
+        </div>
+        <div class="login-section">
+            <h1>Login Page</h1>
+            <hr>
+            <p>{{msg}}</p>
+            <form class="login-form" method="post" action="">
+                {% csrf_token %}
+                Enter your name : <br>
+                <input type="text" name="username" value="" required><br><br>
+                Enter your password : <br>
+                <input type="password" name="password" value="" required><br><br>
+                Enter your email : <br>
+                <input type="email" name="email" value="" required><br><br>
+                Did not have an account? <a href="{% url 'authApp:register' %}">Signup</a><br><br>
+                <button type="submit">Login</button>
+                <a href="{% url 'authApp:forgotPasswordPage' %}">Forgot password</a><br><br>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
